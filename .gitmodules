@@ -1,0 +1,3 @@
+[submodule "mxnet_kogpt2/KoGPT2"]
+	path = mxnet_kogpt2/KoGPT2
+	url = https://github.com/SKT-AI/KoGPT2.git
