@@ -1,0 +1,4 @@
+.model*
+.out_data
+.train_data
+model.tar.gz
