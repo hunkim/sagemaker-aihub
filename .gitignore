@@ -3,5 +3,5 @@
 .model_dir
 .train_data/
 data/
-face_gen_gan
+face_gen_gan/
 
