@@ -20,7 +20,7 @@ def model_fn(model_dir):
         model=model_dir,
         tokenizer=model_dir,
     )
-    return {'model': fill_mask, 'corpus': "TBA"}
+    return fill_mask
 
 
 def input_fn(serialized_input_data, content_type=JSON_CONTENT_TYPE):
@@ -42,26 +42,23 @@ def output_fn(prediction_output, accept=JSON_CONTENT_TYPE):
 
 def predict_fn(input_data, model):
     logger.info('Generating text based on input parameters.')
-    corpus = model['corpus']
-    fill_mask = model['model']
+    return model(input_data['text'])
 
-    return fill_mask(input_data['text'])
-
+# For testing, make sure you run the infer.py and store the model outputs to S3
 if __name__ == '__main__':
     model_dir="./.model"
 
-    # Downlaod model
-    # s3://sagemaker-us-west-2-294038372338/pytorch-training-2020-06-10-11-15-27-506/output/model.tar.gz
+    # Please run train and zip and store the model directory to S3
     import boto3
     s3 = boto3.client('s3')
     s3.download_file('sagemaker-us-west-2-294038372338', 
-    'pytorch-training-2020-06-10-11-15-27-506/output/model.tar.gz', 'model.tar.gz')
+    'pytorch-training-2020-06-11-00-45-34-666/output/model.tar.gz', 'model.tar.gz')
 
     import tarfile
     tar = tarfile.open("model.tar.gz")
     tar.extractall(model_dir)
     tar.close()
 
-    input = {'text': "La suno <mask>."}
+    input = {'text': "Shall we <mask>."}
     model = model_fn(model_dir)
     print(predict_fn(input, model))
