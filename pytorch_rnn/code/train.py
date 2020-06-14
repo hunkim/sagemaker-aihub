@@ -10,6 +10,8 @@ import torch.nn as nn
 import data
 from rnn import RNNModel
 import mxnet 
+from torch.utils.tensorboard import SummaryWriter
+
 
 print (mxnet.__version__)
 
@@ -209,6 +211,8 @@ lr = args.lr
 best_state = None
 
 print('Starting training.')
+writer = SummaryWriter()
+
 for epoch in range(1, args.epochs+1):
     epoch_start_time = time.time()
     train()
@@ -218,6 +222,9 @@ for epoch in range(1, args.epochs+1):
           'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time),
                                      val_loss, math.exp(val_loss)))
     print('-' * 89)
+
+    writer.add_scalar('training loss', val_loss, epoch)
+
     # Save the model if the validation loss is the best we've seen so far.
     if not best_state or val_loss < best_state['val_loss']:
         best_state = {
@@ -235,6 +242,8 @@ for epoch in range(1, args.epochs+1):
     else:
         # Anneal the learning rate if no improvement has been seen in the validation dataset.
         lr /= 4.0
+
+writer.close()
 
 # Load the best saved model.
 with open(checkpoint_path, 'rb') as f:

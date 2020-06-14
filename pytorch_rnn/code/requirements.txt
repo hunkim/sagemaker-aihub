@@ -1,1 +1,4 @@
-mxnet
+mxnet==1.6.0
+torch==1.5.0
+tensorboardX==2.0
+tensorboard
