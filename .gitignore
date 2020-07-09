@@ -9,3 +9,6 @@ model.tar.gz
 t5_ans_gen_model
 t5_que_gen_model
 .scratch
+*.bin
+.model
+__pycache__
